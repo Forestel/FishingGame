@@ -1,0 +1,51 @@
+p,h1{
+    color: white;
+}
+.Instruction{
+    margin-top: 50px;
+background-color: #571D5A;
+height: 800px;
+}
+.h1_Instruction{
+    text-align: center;
+    font-size: 48px;
+    font-weight: bold;
+    
+}
+.Instruction__Step1,.Instruction__Step2,.Instruction__Step3{
+    margin-top: 30px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 100px;
+}
+.img__Instruction__Step1>img{
+    width: 500px;
+    height: 300px;
+    border-radius: 30px;
+    transition: 0.7s;
+}
+.Instruction__Step1__text{
+    font-family: 'Montserrat', sans-serif;
+   margin-top: 2%;
+    width: 700px;
+}
+.Instruction__Step1__h1{
+
+    font-size: 40px;
+}
+.Instruction__Step1__p{
+    text-align: justify;
+    font-size: 21px;
+}
+.img__Instruction__Step1>img:hover{
+transform: scale(1.1);
+}
+.fish__border{
+  
+    padding: 30px 40px;
+    background-color: rgba(0, 0, 0, 0.2);
+    z-index: 9132074;
+   border-radius: 40px;
+
+  }

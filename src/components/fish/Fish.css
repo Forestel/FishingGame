@@ -1,0 +1,148 @@
+
+.Fish {
+  font-family: 'Montserrat', sans-serif;
+    background-color: #571D5A;
+    
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    margin-top: 50px;
+  }
+  
+  .container {
+
+    width: 100%;
+    max-width: 1200px;
+    padding: 0 15px;
+  }
+  
+  .fishcontainer {
+    margin: 0 auto;
+    width: 70%;
+  }
+  
+  .fish__text {
+    text-align: center;
+    width: 100%;
+  }
+  
+  .fishtextcenter {
+    font-weight: bold;
+    font-size: 48px;
+    color: white;
+    margin-bottom: 30px;
+    text-align: center;
+    width: 100%;
+  }
+  .fish__border{
+  
+    padding: 30px 40px;
+    background-color: rgba(0, 0, 0, 0.2);
+    z-index: 9132074;
+   border-radius: 40px;
+
+  }
+  
+  .fish__content {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+ 
+  }
+  
+  .fish-card {
+    width: 300px;
+    height: 300px;
+    background-color: #c924d2;
+    border-radius: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    position: relative;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+  }
+  
+  .fish-card:hover {
+    transform: scale(1.05);
+  }
+  
+  .fishImg {
+   
+    width: 260px;
+    height: 160px;
+    object-fit: contain;
+  }
+  
+  .fish-card-hover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #8a1a8a;
+    border-radius: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    text-align: center;
+    animation: fadeIn 0.3s ease;
+  }
+  
+  .fish-card-hover h3 {
+    font-size: 24px;
+    margin-bottom: 15px;
+  }
+  
+  .fish-card-hover p {
+    font-size: 16px;
+    line-height: 1.4;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  @media (max-width: 724px) {
+    .fish__content {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .fish-card {
+      margin-bottom: 20px;
+    }
+  
+    .fishtextcenter {
+      font-size: 36px;
+    }
+  }
+  
+  @media (max-width: 600px) {
+    .fish-card {
+      width: 250px;
+      height: 250px;
+    }
+  
+    .fishImg {
+      width: 220px;
+      height: 140px;
+    }
+  
+    .fishtextcenter {
+      font-size: 30px;
+    }
+  }

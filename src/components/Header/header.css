@@ -1,0 +1,140 @@
+.header {
+
+    background: linear-gradient(to bottom right, #611A65, #0D0215);
+    padding: 7px 0;
+    height: 1000px;
+}
+.header__row {
+    display: flex;
+    column-gap: 30px;
+    align-items: center;
+    justify-content: space-between;
+}
+.header__nav {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    
+    font-size: 22px;
+}
+.header__nav ul {
+    display: flex;
+    column-gap: 60px;
+    align-items: center;
+}
+.header__nav a {
+    color: white;
+}
+.header__nav-btv {
+    background-color: #611A65;
+    border-radius: 100px;
+    padding: 10px 30px;
+    font-weight: bold;
+    font-size: 23px;
+    transition: 1s;
+}
+.header__nav-btv:hover {
+    transform: scale(1.1);
+    background-color: #8f17b3;
+}
+
+/* Анімований текст і рибка */
+.animated-text-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+ 
+}
+.text {
+    display: flex;
+    font-size: 400px;
+    font-weight: bold;
+    color: #f9a8d4;
+    position: relative;
+    z-index: 2; /* Текст зверху */
+}
+.letter {
+    margin: 0 10px;
+    opacity: 0;
+    transition: 1s;
+    transform: translateY(20px);
+}
+.circle-red {
+    
+    position: absolute;
+    left: 18%;
+    top: 45%;
+    width: 258px;
+    height: 258px;
+    background-color: #ef4444;
+    border-radius: 50%;
+    z-index: 1;
+}
+.circle-blue {
+    position: absolute;
+    left: 21%;
+    top: 15%;
+    width: 118px;
+    height: 118px;
+    background-color: #06b6d4;
+    border-radius: 50%;
+    z-index: 3; /* Перед текстом */
+}
+.fish {
+    position: absolute;
+    right: 200px;
+    width: 583px;
+    height: 583px;
+    
+    z-index: 0; /* Найнижчий рівень */
+}
+
+.glow-button {
+    position: relative;
+    width: 350px;
+    height: 90px;
+    margin: 0 auto;
+}
+
+.glow-button3 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+    border-radius: 90px;
+    background: linear-gradient(45deg, #611A65, #8A1618);
+    font-weight: bold;
+    font-size: 48px;
+    letter-spacing: 2px;
+    color: white;
+    transition: 0.15s ease-in-out;
+    position: relative;
+    padding-left: 50px; /* Зсуває текст праворуч */
+    transition: 0.6s;
+}
+
+.glow-button3 img {
+    position: absolute;
+    left: 80px; /* Регулюйте для зміщення іконки */
+    width: 40px;
+    height: auto;
+}
+
+.glow-button3:hover {
+    border: 1px solid #f619f6;
+  
+    transform: scale(1.2);
+}
+.logout-btn {
+    background: none;
+    border: none;
+    font-family: inherit;
+    font-size: inherit;
+    cursor: pointer;
+    padding: 0;
+    color: inherit;
+    text-decoration: none;
+}
