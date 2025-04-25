@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+
 import { useNavigate } from 'react-router-dom';
 import './FishingGame.css';
 
@@ -28,13 +29,14 @@ const FishingGame = () => {
   const [fishingActive, setFishingActive] = useState(false);
   const [currentKey, setCurrentKey] = useState('A');
   const [keysToPress] = useState(['A', 'S', 'D']);
-  const [successCount, setSuccessCount] = useState(0);
+  const successCountRef = useRef(0);
+
   const [statusMessage, setStatusMessage] = useState("Клацніть на озері, щоб закинути вудку!");
   const [showCaughtFish, setShowCaughtFish] = useState(false);
   const [fishDetails, setFishDetails] = useState({ weight: 0, points: 0, image: null });
   const [imagesLoaded, setImagesLoaded] = useState(false);
   
-  // Refs for animations and timers
+
   const canvasRef = useRef(null);
   const animationRef = useRef(null);
   const progressTimerRef = useRef(null);
@@ -103,21 +105,16 @@ const FishingGame = () => {
       
       const pressedKey = e.key.toUpperCase();
       
-      if (pressedKey === currentKey) {
-        // Correct key pressed
-        setSuccessCount(prev => {
-          const newCount = prev + 1;
-          if (newCount >= requiredKeyPresses) {
-            catchFish();
-            return 0;
-          } else {
-            // Update progress and next key
-            setProgressValue(prev => Math.min(prev + 20, progressBarMax));
-            setCurrentKey(keysToPress[getRandomInt(keysToPress.length)]);
-            return newCount;
-          }
-        });
-      } else {
+     if (pressedKey === currentKey) {
+  successCountRef.current += 1;
+  if (successCountRef.current >= requiredKeyPresses) {
+    catchFish();
+    successCountRef.current = 0;
+  } else {
+    setProgressValue(prev => Math.min(prev + 20, progressBarMax));
+    setCurrentKey(keysToPress[getRandomInt(keysToPress.length)]);
+  }
+} else {
         // Wrong key pressed
         setProgressValue(prev => {
           const newValue = prev - 30;
