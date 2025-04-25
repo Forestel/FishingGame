@@ -84,15 +84,15 @@ const Footer = () => {
         <div className="pay">
             <p>© 2025 Alternativa Game Ltd. All rights reserved. Published by APL Publishing Ltd.</p>
             <div className="pay__servises">
-           <a href=""> <img src={ApplePay} alt="" srcset="" /></a>
-           <a href=""> <img src={GooglePay} alt="" srcset="" /></a>
-           <a href=""> <img src={PayPal} alt="" srcset="" /></a>
-           <a href=""> <img src={MasterCard} alt="" srcset="" /></a>
-           <a href=""> <img src={Visa} alt="" srcset="" /></a>
+           <a href="#"> <img src={ApplePay} alt="" srcset="" /></a>
+           <a href="#"> <img src={GooglePay} alt="" srcset="" /></a>
+           <a href="#"> <img src={PayPal} alt="" srcset="" /></a>
+           <a href="#"> <img src={MasterCard} alt="" srcset="" /></a>
+           <a href="#"> <img src={Visa} alt="" srcset="" /></a>
           
-           <a href=""> <img src={Bitcoin} alt="" srcset="" /></a>
-           <a href=""> <img src={Etherium} alt="" srcset="" /></a>
-           <a href=""> <img src={Mono} alt="" srcset="" /></a>
+           <a href="#"> <img src={Bitcoin} alt="" srcset="" /></a>
+           <a href="#"> <img src={Etherium} alt="" srcset="" /></a>
+           <a href="#"> <img src={Mono} alt="" srcset="" /></a>
            <a href="https://next.privat24.ua/money-transfer/card"> <img src={Privat} alt="" srcset="" /></a>
 
             </div>

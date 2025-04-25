@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 import './FishingGame.css';
@@ -57,6 +57,63 @@ const FishingGame = () => {
     navigate('/');
   };
 
+  // Clear all timers and animations
+  const clearAllTimers = useCallback(() => {
+    if (animationRef.current) clearInterval(animationRef.current);
+    if (progressTimerRef.current) clearInterval(progressTimerRef.current);
+    if (fishingDelayRef.current) clearTimeout(fishingDelayRef.current);
+  }, []);
+
+  // Successfully catch a fish
+  const catchFish = useCallback(() => {
+    // Clean up animations and timers
+    clearAllTimers();
+    
+    // Reset fishing state
+    setIsFishing(false);
+    setFishingActive(false);
+    
+    // Calculate fish weight and points
+    const weight = getRandomInt(5) + 1;
+    const points = weight * 15;
+    
+    setTotalWeight(prev => prev + weight);
+    setTotalPoints(prev => prev + points);
+    
+    // Determine fish image based on weight
+    let fishImage;
+    if (weight <= 2) {
+      fishImage = carp2Img;
+    } else if (weight <= 3) {
+      fishImage = carp1Img;
+    } else if (weight <= 4) {
+      fishImage = carp3Img;
+    } else {
+      fishImage = carp4Img;
+    }
+    
+    // Show caught fish popup
+    setFishDetails({
+      weight,
+      points,
+      image: fishImage
+    });
+    
+    setShowCaughtFish(true);
+    setStatusMessage(prev => `Загальна вага: ${totalWeight + weight} кг`);
+  }, [clearAllTimers, getRandomInt, totalWeight, carp1Img, carp2Img, carp3Img, carp4Img]);
+
+  // Fish got away
+  const fishGotAway = useCallback(() => {
+    // Clean up animations and timers
+    clearAllTimers();
+    
+    // Reset fishing state
+    setIsFishing(false);
+    setFishingActive(false);
+    setStatusMessage("Упс! Риба зірвалася. Спробуйте ще раз!");
+  }, [clearAllTimers]);
+
   // Load images
   useEffect(() => {
     const loadImage = (src) => {
@@ -106,15 +163,15 @@ const FishingGame = () => {
       const pressedKey = e.key.toUpperCase();
       
      if (pressedKey === currentKey) {
-  successCountRef.current += 1;
-  if (successCountRef.current >= requiredKeyPresses) {
-    catchFish();
-    successCountRef.current = 0;
-  } else {
-    setProgressValue(prev => Math.min(prev + 20, progressBarMax));
-    setCurrentKey(keysToPress[getRandomInt(keysToPress.length)]);
-  }
-} else {
+        successCountRef.current += 1;
+        if (successCountRef.current >= requiredKeyPresses) {
+          catchFish();
+          successCountRef.current = 0;
+        } else {
+          setProgressValue(prev => Math.min(prev + 20, progressBarMax));
+          setCurrentKey(keysToPress[getRandomInt(keysToPress.length)]);
+        }
+      } else {
         // Wrong key pressed
         setProgressValue(prev => {
           const newValue = prev - 30;
@@ -132,7 +189,7 @@ const FishingGame = () => {
     return () => {
       window.removeEventListener('keydown', handleKeyPress);
     };
-  }, [gameState, isFishing, fishingActive, currentKey, keysToPress]);
+  }, [gameState, isFishing, fishingActive, currentKey, keysToPress, catchFish, fishGotAway, progressBarMax, getRandomInt]);
 
   // Start fishing when canvas is clicked
   const handleCanvasClick = (e) => {
@@ -196,63 +253,6 @@ const FishingGame = () => {
         });
       }, 50);
     }, (getRandomInt(5) + 2) * 1000);
-  };
-
-  // Successfully catch a fish
-  const catchFish = () => {
-    // Clean up animations and timers
-    clearAllTimers();
-    
-    // Reset fishing state
-    setIsFishing(false);
-    setFishingActive(false);
-    
-    // Calculate fish weight and points
-    const weight = getRandomInt(5) + 1;
-    const points = weight * 15;
-    
-    setTotalWeight(prev => prev + weight);
-    setTotalPoints(prev => prev + points);
-    
-    // Determine fish image based on weight
-    let fishImage;
-    if (weight <= 2) {
-      fishImage = carp2Img;
-    } else if (weight <= 3) {
-      fishImage = carp1Img;
-    } else if (weight <= 4) {
-      fishImage = carp3Img;
-    } else {
-      fishImage = carp4Img;
-    }
-    
-    // Show caught fish popup
-    setFishDetails({
-      weight,
-      points,
-      image: fishImage
-    });
-    
-    setShowCaughtFish(true);
-    setStatusMessage(`Загальна вага: ${totalWeight + weight} кг`);
-  };
-
-  // Fish got away
-  const fishGotAway = () => {
-    // Clean up animations and timers
-    clearAllTimers();
-    
-    // Reset fishing state
-    setIsFishing(false);
-    setFishingActive(false);
-    setStatusMessage("Упс! Риба зірвалася. Спробуйте ще раз!");
-  };
-
-  // Clear all timers and animations
-  const clearAllTimers = () => {
-    if (animationRef.current) clearInterval(animationRef.current);
-    if (progressTimerRef.current) clearInterval(progressTimerRef.current);
-    if (fishingDelayRef.current) clearTimeout(fishingDelayRef.current);
   };
 
   // Handle close of caught fish modal
@@ -361,7 +361,7 @@ const FishingGame = () => {
     return () => {
       clearAllTimers();
     };
-  }, []);
+  }, [clearAllTimers]);
 
   // Save score before page unload
   useEffect(() => {
