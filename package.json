@@ -48,6 +48,7 @@
     ]
   },
   "devDependencies": {
-    "@babel/preset-react": "^7.26.3"
+    "@babel/preset-react": "^7.26.3",
+    "netlify-cli": "^20.1.1"
   }
 }
