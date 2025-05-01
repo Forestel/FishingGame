@@ -84,15 +84,15 @@ const Footer = () => {
         <div className="pay">
             <p>© 2025 Alternativa Game Ltd. All rights reserved. Published by APL Publishing Ltd.</p>
             <div className="pay__servises">
-           <a href="#"> <img src={ApplePay} alt="" srcset="" /></a>
-           <a href="#"> <img src={GooglePay} alt="" srcset="" /></a>
-           <a href="#"> <img src={PayPal} alt="" srcset="" /></a>
-           <a href="#"> <img src={MasterCard} alt="" srcset="" /></a>
-           <a href="#"> <img src={Visa} alt="" srcset="" /></a>
+           <a href="https://www.apple.com/apple-pay/"> <img src={ApplePay} alt="Apple Pay" /></a>
+            <a href="https://pay.google.com/"> <img src={GooglePay} alt="Google Pay" /></a>
+            <a href="https://www.paypal.com/"> <img src={PayPal} alt="PayPal" /></a>
+            <a href="https://www.mastercard.com/"> <img src={MasterCard} alt="MasterCard" /></a>
+            <a href="https://www.visa.com/"> <img src={Visa} alt="Visa" /></a>
           
-           <a href="#"> <img src={Bitcoin} alt="" srcset="" /></a>
-           <a href="#"> <img src={Etherium} alt="" srcset="" /></a>
-           <a href="#"> <img src={Mono} alt="" srcset="" /></a>
+            <a href="https://bitcoin.org/"> <img src={Bitcoin} alt="Bitcoin" /></a>
+            <a href="https://ethereum.org/"> <img src={Etherium} alt="Ethereum" /></a>
+            <a href="https://monobank.ua/"> <img src={Mono} alt="Monobank" /></a>
            <a href="https://next.privat24.ua/money-transfer/card"> <img src={Privat} alt="" srcset="" /></a>
 
             </div>

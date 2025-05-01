@@ -46,8 +46,8 @@ const FishingGame = () => {
   const requiredKeyPresses = 3;
   const progressBarMax = 100;
   
-  // Helper for random numbers
-  const getRandomInt = (max) => Math.floor(Math.random() * max);
+  // Helper for random numbers - wrapped in useCallback
+  const getRandomInt = useCallback((max) => Math.floor(Math.random() * max), []);
 
   // Images object
   const [images, setImages] = useState({});
@@ -101,7 +101,7 @@ const FishingGame = () => {
     
     setShowCaughtFish(true);
     setStatusMessage(prev => `Загальна вага: ${totalWeight + weight} кг`);
-  }, [clearAllTimers, getRandomInt, totalWeight, carp1Img, carp2Img, carp3Img, carp4Img]);
+  }, [clearAllTimers, getRandomInt, totalWeight]);
 
   // Fish got away
   const fishGotAway = useCallback(() => {
