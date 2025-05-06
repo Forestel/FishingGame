@@ -41,13 +41,15 @@ const initializeDb = async () => {
   try {
     const client = await pool.connect();
     await client.query(`
-      CREATE TABLE IF NOT EXISTS users (
-        id SERIAL PRIMARY KEY,
-        username VARCHAR(100) NOT NULL,
-        email VARCHAR(100) UNIQUE NOT NULL,
-        password VARCHAR(100) NOT NULL,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      )
+      
+CREATE TABLE public.users (
+  id INT8 NOT NULL DEFAULT unique_rowid(),
+  username STRING NOT NULL,
+  email STRING NOT NULL,
+  password STRING NOT NULL,
+  CONSTRAINT users_pkey PRIMARY KEY (id ASC),
+  UNIQUE INDEX users_email_key (email ASC)
+)
     `);
     console.log('Database initialized');
     client.release();
