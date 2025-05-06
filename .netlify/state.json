@@ -1,0 +1,21 @@
+{
+	"geolocation": {
+		"data": {
+			"city": "Zolochiv",
+			"country": {
+				"code": "UA",
+				"name": "Ukraine"
+			},
+			"subdivision": {
+				"code": "46",
+				"name": "Lviv"
+			},
+			"timezone": "Europe/Kyiv",
+			"latitude": 49.8,
+			"longitude": 24.888,
+			"postalCode": "80700"
+		},
+		"timestamp": 1746264131812
+	},
+	"siteId": "841b7f5a-6ca7-4413-b079-fc6d2a5138a1"
+}

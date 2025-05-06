@@ -1,189 +1,106 @@
 const express = require('express');
-const mysql = require('mysql2');
-const bcrypt = require('bcrypt');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const { Pool } = require('pg');
+const bcrypt = require('bcrypt');
 
 const app = express();
 const PORT = 3001;
 
-// Middleware з покращеними налаштуваннями CORS
-app.use(cors({
-  origin: 'http://localhost:3000',
-  methods: ['GET', 'POST'],
-  credentials: true
-}));
+app.use(cors());
 app.use(bodyParser.json());
 
-// Create MySQL connection
-const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: 'root',
-  database: 'Fishing_Game',
+// Підключення до CockroachDB
+const pool = new Pool({
+  connectionString: 'postgresql://Adminroman:lC0mQQ4A32Tus7IMk9iJ7Q@decent-caribou-11034.j77.aws-eu-central-1.cockroachlabs.cloud:26257/defaultdb?sslmode=verify-full'
 });
 
-// Connect to MySQL з покращеною обробкою помилок
-db.connect((err) => {
+// Тест підключення
+pool.connect((err, client, release) => {
   if (err) {
-    console.error('Error connecting to MySQL database:', err);
-    return;
+    return console.error('Помилка підключення до CockroachDB:', err.stack);
   }
-  console.log('Connected to MySQL database');
+  console.log('Підключено до CockroachDB');
+  release();
 });
 
-// Додаємо кореневий маршрут
-app.get('/', (req, res) => {
-  res.send('API сервер працює нормально.');
-});
-
-// Sign up route з розширеним логуванням
+// Реєстрація
 app.post('/api/signup', async (req, res) => {
   const { username, email, password } = req.body;
-  
-  console.log('Отримано запит на реєстрацію:', { username, email });
 
-  // Validate input
   if (!username || !email || !password) {
-    console.log('Відсутні обов\'язкові поля');
-    return res.status(400).json({ 
-      success: false, 
-      message: 'Усі поля обов\'язкові' 
-    });
+    return res.status(400).json({ success: false, message: 'Будь ласка, заповніть усі поля' });
   }
 
   try {
-    // Check if email already exists
-    db.query('SELECT * FROM users WHERE email = ?', [email], async (err, results) => {
-      if (err) {
-        console.error('Database error:', err);
-        return res.status(500).json({ 
-          success: false, 
-          message: 'Помилка сервера' 
-        });
-      }
+    const client = await pool.connect();
 
-      if (results.length > 0) {
-        console.log('Email вже зареєстрований:', email);
-        return res.status(400).json({ 
-          success: false, 
-          message: 'Email вже зареєстрований' 
-        });
-      }
+    // Перевірка чи існує email
+    const existingUser = await client.query('SELECT * FROM users WHERE email = $1', [email]);
+    if (existingUser.rows.length > 0) {
+      client.release();
+      return res.status(400).json({ success: false, message: 'Користувач з таким email вже існує' });
+    }
 
-      // Hash password
-      const hashedPassword = await bcrypt.hash(password, 10);
-      console.log('Пароль успішно хешовано');
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-      // Insert new user
-      db.query(
-        'INSERT INTO users (username, email, password) VALUES (?, ?, ?)',
-        [username, email, hashedPassword],
-        (err, result) => {
-          if (err) {
-            console.error('Error inserting user:', err);
-            return res.status(500).json({ 
-              success: false, 
-              message: 'Помилка при створенні користувача' 
-            });
-          }
-          
-          console.log('Користувач успішно створений');
-          return res.status(201).json({ 
-            success: true, 
-            message: 'Користувач успішно зареєстрований' 
-          });
-        }
-      );
-    });
-  } catch (error) {
-    console.error('Server error:', error);
-    res.status(500).json({ 
-      success: false, 
-      message: 'Помилка сервера' 
-    });
-  }
-});
-
-// Login route з покращеним логуванням
-app.post('/api/login', (req, res) => {
-  const { email, password } = req.body;
-  
-  console.log('Отримано запит на вхід:', { email });
-
-  // Validate input
-  if (!email || !password) {
-    console.log('Відсутні обов\'язкові поля для входу');
-    return res.status(400).json({ 
-      success: false, 
-      message: 'Email та пароль обов\'язкові' 
-    });
-  }
-
-  try {
-    // Check if user exists
-    db.query(
-      'SELECT * FROM users WHERE email = ?',
-      [email],
-      async (err, results) => {
-        if (err) {
-          console.error('Database error:', err);
-          return res.status(500).json({ 
-            success: false, 
-            message: 'Помилка сервера' 
-          });
-        }
-
-        if (results.length === 0) {
-          console.log('Користувача не знайдено:', email);
-          return res.status(401).json({ 
-            success: false, 
-            message: 'Невірний email або пароль' 
-          });
-        }
-
-        const user = results[0];
-
-        // Compare passwords
-        const passwordMatch = await bcrypt.compare(password, user.password);
-
-        if (!passwordMatch) {
-          console.log('Невірний пароль для користувача:', email);
-          return res.status(401).json({ 
-            success: false, 
-            message: 'Невірний email або пароль' 
-          });
-        }
-
-        console.log('Успішний вхід користувача:', email);
-        // Don't send password back to client
-        const { password: userPassword, ...userWithoutPassword } = user;
-
-        res.status(200).json({ 
-          success: true, 
-          message: 'Вхід успішний', 
-          user: userWithoutPassword 
-        });
-      }
+    // Додавання користувача
+    await client.query(
+      'INSERT INTO users (username, email, password) VALUES ($1, $2, $3)',
+      [username, email, hashedPassword]
     );
-  } catch (error) {
-    console.error('Server error:', error);
-    res.status(500).json({ 
-      success: false, 
-      message: 'Помилка сервера' 
-    });
+
+    client.release();
+
+    res.json({ success: true, message: 'Реєстрація успішна' });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: 'Помилка при реєстрації' });
   }
 });
 
-// Додаємо маршрут для перевірки з'єднання
-app.get('/api/status', (req, res) => {
-  res.json({ 
-    status: 'online',
-    database: db.state === 'authenticated' ? 'connected' : 'disconnected'
-  });
+// Логін
+app.post('/api/login', async (req, res) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    return res.status(400).json({ success: false, message: 'Будь ласка, заповніть усі поля' });
+  }
+
+  try {
+    const client = await pool.connect();
+
+    const result = await client.query('SELECT * FROM users WHERE email = $1', [email]);
+
+    if (result.rows.length === 0) {
+      client.release();
+      return res.status(401).json({ success: false, message: 'Невірний email або пароль' });
+    }
+
+    const user = result.rows[0];
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      client.release();
+      return res.status(401).json({ success: false, message: 'Невірний email або пароль' });
+    }
+
+    client.release();
+
+    res.json({
+      success: true,
+      message: 'Вхід успішний',
+      user: { id: user.id, username: user.username, email: user.email }
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: 'Помилка входу' });
+  }
 });
 
-// Start server
+// Старт сервера
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`Сервер працює на http://localhost:${PORT}`);
 });
