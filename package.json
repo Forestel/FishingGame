@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@supabase/supabase-js": "^2.49.4",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.2.0",
@@ -19,10 +20,11 @@
     "lucide-react": "^0.477.0",
     "mysql2": "^3.13.0",
     "pg": "^8.15.6",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+
     "react-router-dom": "^7.3.0",
-    "react-scripts": "^5.0.1",
+    "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -49,8 +51,16 @@
       "last 1 safari version"
     ]
   },
+  "engines": {
+  "node": "22.x"
+},
+
   "devDependencies": {
     "@babel/preset-react": "^7.26.3",
-    "netlify-cli": "^20.1.1"
+    "netlify-cli": "^20.1.1",
+    "prisma": "^5.10.2",
+    "typescript": "^4.5.5"
+
   }
+  
 }
