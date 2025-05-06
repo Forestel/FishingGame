@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './SignUp.css';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { authService } from '../services/api';
 
 function SignUp() {
   const [formData, setFormData] = useState({
@@ -11,47 +11,49 @@ function SignUp() {
     confirmPassword: ''
   });
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
+  
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
     });
   };
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError('');
     
     // Validate passwords match
     if (formData.password !== formData.confirmPassword) {
       setError('Паролі не співпадають');
+      setLoading(false);
       return;
     }
     
     try {
-      const response = await axios.post('http://localhost:3001/api/signup', {
-        username: formData.username,
-        email: formData.email,
-        password: formData.password
-      });
+      const result = await authService.signup(
+        formData.username, 
+        formData.email, 
+        formData.password
+      );
       
-      if (response.data.success) {
+      if (result.success) {
         // Redirect to login page after successful registration
         navigate('/login');
       } else {
-        setError(response.data.message || 'Помилка при реєстрації');
+        setError(result.message || 'Помилка при реєстрації');
       }
     } catch (err) {
-      if (err.response && err.response.data.message) {
-        setError(err.response.data.message);
-      } else {
-        setError('Помилка сервера. Спробуйте ще раз.');
-      }
+      setError(err.message || 'Помилка сервера. Спробуйте ще раз.');
       console.error(err);
+    } finally {
+      setLoading(false);
     }
   };
-
+  
   return (
     <div className="signup-container">
       <div className="signup-form-wrapper">
@@ -67,6 +69,7 @@ function SignUp() {
               value={formData.username}
               onChange={handleChange}
               required
+              disabled={loading}
             />
           </div>
           <div className="form-group">
@@ -78,6 +81,7 @@ function SignUp() {
               value={formData.email}
               onChange={handleChange}
               required
+              disabled={loading}
             />
           </div>
           <div className="form-group">
@@ -90,6 +94,7 @@ function SignUp() {
               onChange={handleChange}
               required
               minLength="6"
+              disabled={loading}
             />
           </div>
           <div className="form-group">
@@ -102,9 +107,16 @@ function SignUp() {
               onChange={handleChange}
               required
               minLength="6"
+              disabled={loading}
             />
           </div>
-          <button type="submit" className="signup-button">Зареєструватися</button>
+          <button 
+            type="submit" 
+            className="signup-button"
+            disabled={loading}
+          >
+            {loading ? 'Завантаження...' : 'Зареєструватися'}
+          </button>
         </form>
         <p className="login-link">
           Вже маєте аккаунт? <a href="/login">Увійти</a>
