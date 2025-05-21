@@ -11,9 +11,9 @@ const PORT = process.env.PORT || 3001;
 
 // Configure CORS for production
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production' 
-    ? process.env.FRONTEND_URL  // Your frontend URL on Render
-    : 'https://fishinggame-2.onrender.com',  // Local development
+  origin: process.env.NODE_ENV === 'production'
+    ? process.env.FRONTEND_URL // Наприклад: https://fishinggame-2.onrender.com
+    : 'http://localhost:3000',
   credentials: true
 }));
 
