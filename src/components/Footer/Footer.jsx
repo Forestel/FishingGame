@@ -35,7 +35,7 @@ const Footer = () => {
                 <a href="https://github.com/Forestel">
                 <img src={github} alt="" srcset="" />
                 </a>
-                <a href="https://github.com/Forestel">
+                <a href="mailto:roma.kovalskiy2005@gmail.com">
                 <img src={email} alt="" srcset="" />
                 </a>
             </div>
@@ -46,7 +46,7 @@ const Footer = () => {
                 <div className="hotline_text">
                     <p className='hotline_h1'>Hotline</p>
                     <p className='hotline_number'>+38(098) 414-68-24</p>
-                    <p className='hotline_number'>+38(097) 011-39-24</p>
+                    
                 </div>
 
                 <div className="Email_text">
