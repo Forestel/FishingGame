@@ -13,7 +13,7 @@ const PORT = process.env.PORT || 3001;
 app.use(cors({
   origin: process.env.NODE_ENV === 'production' 
     ? process.env.FRONTEND_URL  // Your frontend URL on Render
-    : 'http://localhost:3000',  // Local development
+    : 'https://fishinggame-2.onrender.com',  // Local development
   credentials: true
 }));
 
